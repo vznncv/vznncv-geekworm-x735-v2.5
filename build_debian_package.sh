@@ -64,8 +64,10 @@ fi
 # copy scripts
 log_info "Gather package content"
 mkdir -p "$PKG_USR_DIR/bin"
-cp --no-target-directory "$SCRIPT_DIR/geekworm-x735-fan.py" "$PKG_USR_DIR/bin/geekworm-x735-fan"
-chmod +x "$PKG_USR_DIR/bin/geekworm-x735-fan"
+for script_name in "geekworm-x735-fan" "geekworm-x735-power"; do
+    cp --no-target-directory "${SCRIPT_DIR}/${script_name}.py" "$PKG_USR_DIR/bin/${script_name}"
+    chmod +x "$PKG_USR_DIR/bin/${script_name}"
+done
 mkdir -p "$PKG_USR_DIR/lib/systemd/system"
 cp "$SCRIPT_DIR/systemd/"*.service "$PKG_USR_DIR/lib/systemd/system"
 

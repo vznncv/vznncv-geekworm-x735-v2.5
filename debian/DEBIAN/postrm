@@ -1,0 +1,4 @@
+#!/bin/sh
+set -e
+# reload system daemon to update configuration
+systemctl daemon-reload

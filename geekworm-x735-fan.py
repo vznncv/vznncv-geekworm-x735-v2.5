@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+"""
+Helper script to control geekwork x735 PWM FAN
+"""
 import argparse
 import logging
 import time
@@ -9,7 +12,7 @@ _FAN_PWM_UPDATE_PERIOD = 2
 _LOG_UPDATER_PERIOD = 5 * 60
 logger = logging.getLogger("fan-service")
 
-_FAN_PWM_PIN = 13
+_x735_FAN_PWM_GPIO = 13
 _TEMP_SYS_PATH = '/sys/class/thermal/thermal_zone0/temp'
 
 
@@ -87,7 +90,7 @@ def main(args=None):
 
     pi = pigpio.pi()
     # configure fan pin
-    pi.set_mode(_FAN_PWM_PIN, pigpio.OUTPUT)
+    pi.set_mode(_x735_FAN_PWM_GPIO, pigpio.OUTPUT)
 
     logger.info(f"Start ...")
     next_log = time.time()
@@ -98,7 +101,7 @@ def main(args=None):
         while True:
             cpu_temp = _get_cpu_temp()
             duty_cycle = fan_controller.get_duty_cycle(cpu_temp)
-            pi.hardware_PWM(_FAN_PWM_PIN, _CPU_FAN_PWM_FREQ, _to_pigpio_hw_dutycycle(duty_cycle))
+            pi.hardware_PWM(_x735_FAN_PWM_GPIO, _CPU_FAN_PWM_FREQ, _to_pigpio_hw_dutycycle(duty_cycle))
             if time.time() >= next_log:
                 logger.info(f"CPU: {cpu_temp:.1f} C; Fan: {duty_cycle:.1%}")
                 next_log += _LOG_UPDATER_PERIOD
@@ -110,9 +113,9 @@ def main(args=None):
         cpu_temp = _get_cpu_temp()
         logger.info(f"Stop. CPU: {cpu_temp:.1f} C; Fan: ${0:.1%} (disable)")
         # disable pwm
-        pi.hardware_PWM(_FAN_PWM_PIN, _CPU_FAN_PWM_FREQ, 0)
+        pi.hardware_PWM(_x735_FAN_PWM_GPIO, _CPU_FAN_PWM_FREQ, 0)
         # disable pin
-        pi.set_mode(_FAN_PWM_PIN, pigpio.INPUT)
+        pi.set_mode(_x735_FAN_PWM_GPIO, pigpio.INPUT)
 
 
 if __name__ == '__main__':

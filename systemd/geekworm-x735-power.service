@@ -1,10 +1,10 @@
 [Unit]
-Description=geekworm x735 fan control service
+Description=geekworm x735 power signal monitor service
 Requires=pigpiod.service
 After=pigpiod.service
 
 [Service]
-ExecStart=/usr/bin/geekworm-x735-fan
+ExecStart=/usr/bin/geekworm-x735-power monitor
 
 [Install]
 WantedBy=multi-user.target

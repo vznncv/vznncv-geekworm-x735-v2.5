@@ -1,0 +1,14 @@
+[Unit]
+Description=geekworm x735 safe shutdown
+Requires=netwrok.target pigpiod.service
+After=netwrok.target pigpiod.service
+Before=shutdown.target
+RefuseManualStop=yes
+
+[Service]
+ExecStart=/bin/true
+ExecStop=/usr/bin/geekworm-x735-power safe-shutdown
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

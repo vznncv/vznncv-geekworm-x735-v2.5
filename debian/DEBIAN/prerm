@@ -1,7 +1,14 @@
 #!/bin/sh
 set -e
 
-# stop and disable fan control service
-echo "INFO: stop geekworm-x735-fan.service" >&2
+# disable fan control service
+echo "INFO: disable geekworm-x735-fan.service" >&2
 systemctl stop geekworm-x735-fan.service
 systemctl disable geekworm-x735-fan.service
+# disable power monitoring service
+echo "INFO: disable geekworm-x735-power.service" >&2
+systemctl stop geekworm-x735-power.service
+systemctl disable geekworm-x735-power.service
+# disable safe shutdown service
+echo "INFO: disable geekworm-x735-safe-shutdown.service" >&2
+systemctl disable geekworm-x735-safe-shutdown.service
