@@ -1,0 +1,7 @@
+#!/bin/sh
+set -e
+
+# stop and disable fan control service
+echo "INFO: stop geekworm-x735-fan.service" >&2
+systemctl stop geekworm-x735-fan.service
+systemctl disable geekworm-x735-fan.service

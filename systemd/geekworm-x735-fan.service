@@ -1,0 +1,10 @@
+[Unit]
+Description=geekworm-x735-fan
+Requires=pigpiod.service
+After=pigpiod.service
+
+[Service]
+ExecStart=/usr/bin/geekworm-x735-fan
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,11 @@
+#!/bin/sh
+set -e
+
+# ensure that pigpoi daemon
+echo "INFO: enable pigpiod.service" >&2
+systemctl enable pigpiod.service
+systemctl start pigpiod.service
+# enable and start fan control service
+echo "INFO: enable geekworm-x735-fan.service" >&2
+systemctl enable geekworm-x735-fan.service
+systemctl start geekworm-x735-fan.service

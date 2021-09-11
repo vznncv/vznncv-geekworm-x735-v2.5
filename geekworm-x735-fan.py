@@ -26,7 +26,7 @@ _CPU_FAN_PWM_FREQ = 25000
 
 
 class _FANController:
-    _CPU_FAN_TEMP_MIN_START = 55
+    _CPU_FAN_TEMP_MIN_START = 50
     _CPU_FAN_TEMP_MIN_STOP = 45
 
     _CPU_FAN_DS_MIN = 0.2

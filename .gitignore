@@ -102,3 +102,7 @@ ENV/
 /discord/
 /skype/
 /msteams/
+
+# debian package folder
+/debian/usr
+/dist
