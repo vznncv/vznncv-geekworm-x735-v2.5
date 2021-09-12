@@ -53,3 +53,8 @@ To reduce CPU usage you can disable alert functionality of *pigpiod*, as it isn'
    sudo systemctl daemon-reload
    sudo systemctl restart pigpiod
    ```
+
+## TODO
+
+- Add fan control settings
+- Add CI/CD for debian package building

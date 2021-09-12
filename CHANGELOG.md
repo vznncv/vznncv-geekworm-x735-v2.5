@@ -6,4 +6,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
-- 
+- Added shield fan control service
+- Added shield power signal monitor service
+- Added safe shutdown service
