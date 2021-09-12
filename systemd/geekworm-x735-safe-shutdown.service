@@ -1,7 +1,7 @@
 [Unit]
 Description=geekworm x735 safe shutdown
-Requires=netwrok.target pigpiod.service
-After=netwrok.target pigpiod.service
+Requires=network.target pigpiod.service
+After=network.target pigpiod.service
 Before=shutdown.target
 RefuseManualStop=yes
 

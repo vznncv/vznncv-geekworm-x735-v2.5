@@ -56,6 +56,8 @@ def _safe_shutdown():
 
 _x735_REBOOT_PULSE = 0.2
 _x735_POWEROFF_PULSE = 0.6
+_X735_SHUTDOWN_SIGNAL_LOW_PULL_PERIOD = 0.2
+_X735_SHUTDOWN_SIGNAL_HIGH_PULL_PERIOD = 0.02
 
 
 def _monitor_momentary_button():
@@ -69,7 +71,7 @@ def _monitor_momentary_button():
     logger.info(f"Start power control GPIO ({_x735_SHUTDOWN_SIGNAL_GPIO}) monitoring")
     try:
         while True:
-            pi.wait_for_edge(_x735_SHUTDOWN_SIGNAL_GPIO, edge=pigpio.EITHER_EDGE)
+            time.sleep(_X735_SHUTDOWN_SIGNAL_LOW_PULL_PERIOD)
             shutdown_signal = pi.read(_x735_SHUTDOWN_SIGNAL_GPIO)
             if not shutdown_signal:
                 continue
@@ -77,7 +79,7 @@ def _monitor_momentary_button():
             pulse_start = time.time()
             logger.info(f"Detect pulse start")
             while shutdown_signal:
-                time.sleep(0.02)
+                time.sleep(_X735_SHUTDOWN_SIGNAL_HIGH_PULL_PERIOD)
 
                 pulse_time = time.time() - pulse_start
                 if pulse_time > _x735_POWEROFF_PULSE:
