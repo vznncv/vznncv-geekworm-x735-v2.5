@@ -1,0 +1,13 @@
+[Unit]
+Description=geekworm x735 safe poweroff
+DefaultDependencies=no
+Before=umount.target
+RefuseManualStart=yes
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/geekworm-x735-power safe-reboot
+RemainAfterExit=yes
+
+[Install]
+WantedBy=reboot.target

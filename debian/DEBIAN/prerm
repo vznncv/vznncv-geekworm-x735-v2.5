@@ -1,14 +1,20 @@
 #!/bin/sh
 set -e
 
-# disable fan control service
-echo "INFO: disable geekworm-x735-fan.service" >&2
-systemctl stop geekworm-x735-fan.service
-systemctl disable geekworm-x735-fan.service
-# disable power monitoring service
-echo "INFO: disable geekworm-x735-power.service" >&2
-systemctl stop geekworm-x735-power.service
-systemctl disable geekworm-x735-power.service
-# disable safe shutdown service
-echo "INFO: disable geekworm-x735-safe-shutdown.service" >&2
-systemctl disable geekworm-x735-safe-shutdown.service
+# stop and disable services
+SERVICE_COMMANDS="pigpiod:sd geekworm-x735-power:sd geekworm-x735-fan:sd geekworm-x735-safe-poweroff:d geekworm-x735-safe-reboot:d"
+for service_cmd in $SERVICE_COMMANDS; do
+    service_name="${service_cmd%:*}"
+    service_cmd="${service_cmd#*:}"
+    if [ "$service_cmd" = "sd" ]; then
+        echo "INFO: stop and disable ${service_name}.service" >&2
+        systemctl stop "${service_name}.service"
+        systemctl disable "${service_name}.service"
+    elif [ "$service_cmd" = "d" ]; then
+        echo "INFO: disable ${service_name}.service" >&2
+        systemctl disable "${service_name}.service"
+    else
+        "ERROR: invalid command ${service_cmd}" >&2
+        exit 1
+    fi
+done

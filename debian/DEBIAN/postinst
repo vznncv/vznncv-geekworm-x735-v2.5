@@ -2,19 +2,21 @@
 set -e
 # reload system daemon to update configuration
 systemctl daemon-reload
-# ensure that pigpoi daemon
-echo "INFO: enable pigpiod.service" >&2
-systemctl enable pigpiod.service
-systemctl start pigpiod.service
-# enable fan control service
-echo "INFO: enable geekworm-x735-fan.service" >&2
-systemctl enable geekworm-x735-fan.service
-systemctl start geekworm-x735-fan.service
-# enable power monitoring service
-echo "INFO: enable geekworm-x735-power.service" >&2
-systemctl enable geekworm-x735-power.service
-systemctl start geekworm-x735-power.service
-# enable safe shutdown service
-echo "INFO: enable geekworm-x735-safe-shutdown.service" >&2
-systemctl enable geekworm-x735-safe-shutdown.service
-systemctl start geekworm-x735-safe-shutdown.service
+
+# enable and start services
+SERVICE_COMMANDS="pigpiod:es geekworm-x735-power:es geekworm-x735-fan:es geekworm-x735-safe-poweroff:e geekworm-x735-safe-reboot:e"
+for service_cmd in $SERVICE_COMMANDS; do
+    service_name="${service_cmd%:*}"
+    service_cmd="${service_cmd#*:}"
+    if [ "$service_cmd" = "es" ]; then
+        echo "INFO: enable and start ${service_name}.service" >&2
+        systemctl enable "${service_name}.service"
+        systemctl start "${service_name}.service"
+    elif [ "$service_cmd" = "e" ]; then
+        echo "INFO: enable ${service_name}.service" >&2
+        systemctl enable "${service_name}.service"
+    else
+        "ERROR: invalid command ${service_cmd}" >&2
+        exit 1
+    fi
+done
