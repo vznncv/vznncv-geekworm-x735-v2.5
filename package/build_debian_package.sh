@@ -44,14 +44,18 @@ function assert_tool() {
 
 function help() {
     log "Helper script to build debian package"
-    log "Usage: $SCRIPT_NAME [-h|--help]"
+    log "Usage: $SCRIPT_NAME [-h|--help] [--dev-build)]"
 }
-
+DEV_BUILD=""
 while [[ $# -gt 0 ]]; do
     case "$1" in
     -h | --help)
         help
         exit 0
+        ;;
+    --dev-build)
+        DEV_BUILD="1"
+        shift
         ;;
     *)
         log "ERROR: unknown option: $1"
@@ -77,12 +81,18 @@ SOURCE_NAME="$(sed -n -E -e 's/Source:\s+(.*)/\1/p' debian/control)"
 readarray -t RELEASED_VERSIONS <<<"$(sed -n -E -e 's/^##\s*\[([0-9.]*)\][^0-9]*([0-9-]+)\s*$/\1:\2/p' "${SOURCE_DIR}/CHANGELOG.md")"
 # add dummy release version if no versions are released
 if [[ "${#RELEASED_VERSIONS[@]}" -eq 0 ]]; then
-    RELEASED_VERSIONS+=("0.1.0:$(date '+%Y-%m-%d')")
+    RELEASED_VERSIONS+=("0.1.0-1:$(date '+%Y-%m-%d')")
+fi
+# override version (it can be used for dev package building)
+if [[ "$DEV_BUILD" == 1 ]]; then
+    LAST_VERSION="${RELEASED_VERSIONS[0]%:*}"
+    NEXT_VERSION="$((${LAST_VERSION%%.*} + 1)).0.0-dev"
+    RELEASED_VERSIONS=("$NEXT_VERSION:$(date '+%Y-%m-%d')" "${RELEASED_VERSIONS[@]}")
 fi
 # build changelog
 DEBIAN_CHANGELOG_FILE="debian/changelog"
 for RELEASE_IFNO in "${RELEASED_VERSIONS[@]}"; do
-    RELEASE_VERSION="${RELEASE_IFNO%:*}-1"
+    RELEASE_VERSION="${RELEASE_IFNO%:*}"
     RELEASE_DATE="${RELEASE_IFNO#*:}"
     echo "${SOURCE_NAME} (${RELEASE_VERSION}) stable; urgency=medium"
     echo ""

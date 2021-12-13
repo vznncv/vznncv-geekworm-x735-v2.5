@@ -1,0 +1,53 @@
+on:
+  push:
+    branches:
+      - "**"
+    tags:
+      - "v*.*.*"
+jobs:
+  build-deb-package:
+    runs-on: ubuntu-latest
+    container: debian:bullseye
+    steps:
+      - uses: actions/checkout@v2
+      - name: install build dependencies
+        run: apt-get update && apt-get install -y bash dpkg-dev debhelper
+      - name: build release package
+        if: github.ref_type == 'tag'
+        run: package/build_debian_package.sh
+      - name: build dev package
+        if: github.ref_type == 'branch'
+        run: package/build_debian_package.sh --dev-build
+      - name: Save debian package
+        uses: actions/upload-artifact@v2
+        with:
+          name: debian-package
+          path: package/dist/*.deb
+          if-no-files-found: error
+          retention-days: 5
+  release-package:
+    needs: build-deb-package
+    runs-on: ubuntu-latest
+    if: github.ref_type == 'tag'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Read changelog
+        id: changelog_reader
+        uses: mindsers/changelog-reader-action@e1a36842bddbd512340f882735802de843998e1f # v2.0.0
+      - name: Compare changelog and release versions
+        run: |
+          if [ "${{ github.ref_name }}" != "v${{ steps.changelog_reader.outputs.version }}" ]; then
+              echo "Tag (${{ github.ref_name }}) and CHANGELOG.md versions (v${{ steps.changelog_reader.outputs.version }}) aren't coincide!" >&2
+              exit 1
+          fi
+      - name: Download debian package
+        uses: actions/download-artifact@v2
+        with:
+          name: debian-package
+          path: packages
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          fail_on_unmatched_files: true
+          files: "packages/*.deb"
+          body: "${{ steps.changelog_reader.outputs.changes }}"
