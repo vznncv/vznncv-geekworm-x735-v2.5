@@ -92,17 +92,18 @@ class _Config:
             raw_section_config = raw_config[section_name] = {}
             section_config_dict = {k: v for k, v in section_config.items()}
             for option in section_options:
-                if option in section_config_dict:
+                if option.name in section_config_dict:
                     raw_section_config[option.name] = section_config_dict.pop(option.name)
             if section_config_dict:
                 raise ValueError(f"Unknown options of the section [{section_name}]: {section_config_dict}")
         # add options from parser
         for section_name, section_options in self._CONFIG_DESCRIPTION.items():
+            raw_section_config = raw_config.setdefault(section_name, {})
             for option in section_options:
                 dest = f'{section_name}_{option.name}'
                 value = getattr(parser_options, dest, None)
                 if value is not None:
-                    raw_config.setdefault(section_name, {})[option.name] = value
+                    raw_section_config[option.name] = value
 
         # parse/validate options
         self._parsed_config = {}

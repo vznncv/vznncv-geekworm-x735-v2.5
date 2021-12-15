@@ -1,0 +1,14 @@
+Source: vznncv-geekworm-x735-v2.5
+Maintainer: Konstantin Kochin <vznncv@gmail.com>
+Section: utils
+Build-Depends: debhelper-compat (= 12)
+Standards-Version: 4.4.1
+
+Package: geekworm-x735-v2.5
+Architecture: all
+Depends: pigpio, python3, python3-pigpio, ${misc:Depends}
+Description: geekwork-x735-v2.5 utility scripts
+ Helper service scripts for raspberry pi 4 geekwork-x735-v2.5 shield.
+ The services implements the following functionality:
+ - power controls by button (poweroff/reboot)
+ - fan control
