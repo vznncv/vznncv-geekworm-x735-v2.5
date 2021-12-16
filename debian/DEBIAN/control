@@ -1,6 +1,0 @@
-Package: geekworm-x735-v2.5
-Version: 0.1.0-1
-Architecture: all
-Maintainer: Konstantin Kochin <vznncv@gmail.com>
-Description: Helper package for fun/button functionality of geekworm x735 v2.5 raspberry pi shield
-Depends: pigpio, python3, python3-pigpio

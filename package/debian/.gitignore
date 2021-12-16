@@ -1,0 +1,8 @@
+# ignore temporary files
+vznncv-geekworm-x735-v2.5
+geekworm-x735-v2.5
+changelog
+files
+*.substvars
+debhelper-*
+*.debhelper

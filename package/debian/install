@@ -1,0 +1,4 @@
+geekworm-x735-fan usr/bin
+geekworm-x735-power usr/bin
+systemd/*.service usr/lib/systemd/system
+default_config/config.conf etc/geekworm-x735

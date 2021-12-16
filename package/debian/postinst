@@ -1,0 +1,22 @@
+#!/bin/sh
+set -e
+# reload system daemon to update configuration
+systemctl daemon-reload
+
+# enable and start services
+SERVICE_COMMANDS="pigpiod:es geekworm-x735-power:es geekworm-x735-fan:es geekworm-x735-safe-poweroff:e geekworm-x735-safe-reboot:e"
+for service_cmd in $SERVICE_COMMANDS; do
+    service_name="${service_cmd%:*}"
+    service_cmd="${service_cmd#*:}"
+    if [ "$service_cmd" = "es" ]; then
+        echo "INFO: enable and start ${service_name}.service" >&2
+        systemctl enable "${service_name}.service"
+        systemctl start "${service_name}.service"
+    elif [ "$service_cmd" = "e" ]; then
+        echo "INFO: enable ${service_name}.service" >&2
+        systemctl enable "${service_name}.service"
+    else
+        "ERROR: invalid command ${service_cmd}" >&2
+        exit 1
+    fi
+done

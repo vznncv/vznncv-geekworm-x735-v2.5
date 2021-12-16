@@ -97,12 +97,3 @@ ENV/
 
 # Rope project settings
 .ropeproject
-
-# other temporary files
-/discord/
-/skype/
-/msteams/
-
-# debian package folder
-/debian/usr
-/dist
