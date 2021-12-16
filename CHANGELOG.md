@@ -8,9 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Added `/etc/geekworm-x735/config.conf` file with fan configuration options.
 ### Changed
-- Refactor `geekworm-x735-power.py` script to use *sysfs* instead of *pigpio*. It helps to avoid problems with
+- Refactor `geekworm-x735-power` script to use *sysfs* instead of *pigpio*. It helps to avoid problems with
   network availability during shutdown.
-- Refactor debina package build scripts to use `dpgk-buildpackage` instead of `dpkg-deb`
+- Switch GPIO input pull up/down mode to output pull/push for power control pins to simplify `geekworm-x735-power`
+  script implementation.
+- Refactor debian package build scripts to use `dpgk-buildpackage` instead of `dpkg-deb`
 ### Fixed
 - Fixed systemd safe shutdown/reboot hooks.
 
